@@ -1,0 +1,45 @@
+name: Helpdesk Automation
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  process-ticket:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Auto Label & Assign
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const title = issue.title.toLowerCase();
+
+            let labels = [];
+            let assignee = "";
+
+            if (title.includes("billing")) {
+              labels.push("billing");
+              assignee = "your-username";
+            } else if (title.includes("bug") || title.includes("error")) {
+              labels.push("technical");
+              assignee = "your-username";
+            } else {
+              labels.push("support");
+              assignee = "your-username";
+            }
+
+            await github.rest.issues.addLabels({
+              ...context.repo,
+              issue_number: issue.number,
+              labels
+            });
+
+            if (assignee) {
+              await github.rest.issues.addAssignees({
+                ...context.repo,
+                issue_number: issue.number,
+                assignees: [assignee]
+              });
+            }
