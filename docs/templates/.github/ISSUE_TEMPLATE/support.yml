@@ -1,0 +1,21 @@
+name: Support Request
+description: Submit a helpdesk ticket
+title: "[SUPPORT] "
+labels: ["support"]
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: Issue Summary
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Billing
+        - Technical
+        - General
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
